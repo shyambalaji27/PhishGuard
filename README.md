@@ -14,3 +14,4 @@
 
 **PhishGuard** was engineered to solve a fundamental problem in automated link scanning: **the black-box dilemma**. Many conventional scanners present users with a binary "Safe" or "Unsafe" verdict without explaining *why*, leaving users uninformed about the underlying social engineering and domain-spoofing vectors.
 
+
