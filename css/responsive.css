@@ -1,0 +1,191 @@
+/* ==========================================================================
+   PhishGuard - Responsive Layout & Breakpoints
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --sidebar-width: 280px;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+
+  .mobile-toggle-btn {
+    display: flex;
+  }
+
+  .hero-banner {
+    flex-direction: column;
+    text-align: left;
+    padding: 2rem;
+  }
+
+  .hero-shield-art {
+    display: none;
+  }
+
+  .content-container {
+    padding: 1.5rem;
+  }
+
+  .gauge-cluster {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .result-header-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 1rem;
+  }
+
+  .topbar-threat-badge {
+    display: none;
+  }
+
+  .content-container {
+    padding: 1rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  .scanner-container-card {
+    padding: 1.5rem;
+  }
+
+  .scanner-input-group {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .input-protocol-icon {
+    display: none;
+  }
+
+  .input-actions-cluster {
+    justify-content: flex-end;
+  }
+
+  .btn-primary-scan {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .history-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input-box {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .select-filter {
+    width: 100%;
+  }
+
+  .table-card-container {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+
+  .app-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: unset;
+  }
+
+  .result-actions-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-secondary {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-heading {
+    font-size: 1.85rem;
+  }
+
+  .scan-result-panel {
+    padding: 1.25rem;
+  }
+
+  .modal-window {
+    max-height: 95vh;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}
+

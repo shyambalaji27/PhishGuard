@@ -1,0 +1,14 @@
+# Environment & OS
+.DS_Store
+Thumbs.db
+*.log
+.env
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+

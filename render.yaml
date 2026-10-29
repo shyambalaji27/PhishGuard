@@ -1,0 +1,25 @@
+# Render Deployment Blueprint for PhishGuard
+# Documentation: https://render.com/docs/blueprint-spec
+
+services:
+  # Option 1: Static Site (Fast, Free, Zero-Configuration)
+  - type: web
+    name: phishguard-app
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+

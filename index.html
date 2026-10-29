@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard — AI-Inspired Phishing URL Detector</title>
+  <meta name="description" content="Explainable, client-side phishing URL detection engine and cybersecurity threat dashboard.">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Primary Application Layout -->
+  <div class="app-layout">
+
+    <!-- ====================================================
+         Sidebar Navigation
+         ==================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-logo" data-page-target="overview">
+          <div class="brand-icon">
+            <i data-lucide="shield-alert"></i>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">PhishGuard</span>
+            <span class="brand-subtitle">Cyber Threat Intel</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Security Core</div>
+        
+        <a href="#overview" class="nav-item active" data-page-target="overview">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Overview</span>
+        </a>
+
+        <a href="#scanner" class="nav-item" data-page-target="scanner">
+          <i data-lucide="scan-line"></i>
+          <span>URL Scanner</span>
+          <span class="nav-badge">Primary</span>
+        </a>
+
+        <a href="#history" class="nav-item" data-page-target="history">
+          <i data-lucide="history"></i>
+          <span>Scan History</span>
+        </a>
+
+        <div class="nav-section-title">Knowledge & System</div>
+
+        <a href="#education" class="nav-item" data-page-target="education">
+          <i data-lucide="book-open"></i>
+          <span>Threat Education</span>
+        </a>
+
+        <a href="#about" class="nav-item" data-page-target="about">
+          <i data-lucide="info"></i>
+          <span>About Project</span>
+        </a>
+
+        <a href="#settings" class="nav-item" data-page-target="settings">
+          <i data-lucide="settings"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="engine-status-card">
+          <div class="status-indicator">
+            <div class="pulse-dot"></div>
+            <span>Heuristic Engine v1.4</span>
+          </div>
+          <div class="engine-version">Transparent Client Diagnostic</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================
+         Main Workspace Wrapper
+         ==================================================== -->
+    <div class="main-wrapper">
+
+      <!-- Sticky Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="topbar-threat-badge">
+            <i data-lucide="shield-check"></i>
+            <span>Local Diagnostic Mode (Zero External Data Leak)</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Theme Mode Switcher -->
+          <button class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+            <i data-lucide="sun" class="theme-toggle-icon"></i>
+          </button>
+
+          <!-- SecOps User Placeholder -->
+          <div class="user-profile-badge" title="Active Security Analyst Session">
+            <div class="user-avatar">SO</div>
+            <span class="user-name">SecOps Demo</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Dynamic Content Views -->
+      <main class="content-container">
+
+        <!-- ====================================================
+             VIEW 1: DASHBOARD OVERVIEW
+             ==================================================== -->
+        <section id="page-overview" class="page-view active">
+          
+          <!-- Landing Hero Banner -->
+          <div class="hero-banner">
+            <div class="hero-content">
+              <div class="hero-tag">
+                <i data-lucide="shield-alert"></i>
+                <span>Explainable Heuristic Analysis</span>
+              </div>
+              <h1 class="hero-heading">Stay One Step Ahead of Phishing.</h1>
+              <p class="hero-description">
+                Analyze suspicious links and understand the signals behind every security verdict.
+                Evaluate lexical anomalies, typosquatting, deceptive subdomains, and obfuscation techniques with complete diagnostic transparency.
+              </p>
+              <div class="hero-actions">
+                <button class="btn-primary-scan action-quick-scan">
+                  <i data-lucide="search"></i>
+                  <span>Launch URL Scanner</span>
+                </button>
+                <a href="#education" class="btn-secondary" data-page-target="education">
+                  <i data-lucide="graduation-cap"></i>
+                  <span>Explore Threat Anatomy</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Animated Graphic -->
+            <div class="hero-shield-art">
+              <div class="shield-graphic-wrapper">
+                <i data-lucide="shield-alert" class="shield-center-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary KPI Metric Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card total">
+              <div class="metric-header">
+                <span class="metric-label">Total URLs Evaluated</span>
+                <div class="metric-icon-wrap">
+                  <i data-lucide="layers"></i>
+                </div>
+              </div>
+              <div class="metric-value-wrap">
+                <span class="metric-value" id="statTotalScans">0</span>
+              </div>
+            </div>
+
+            <div class="metric-card safe">
+              <div class="metric-header">
+                <span class="metric-label">Safe URLs Verified</span>
+                <div class="metric-icon-wrap">
+                  <i data-lucide="check-circle-2"></i>
+                </div>
+              </div>
+              <div class="metric-value-wrap">
+                <span class="metric-value" id="statSafeScans">0</span>
+                <span class="metric-badge" id="statSafePct">0%</span>
+              </div>
+            </div>
+
+            <div class="metric-card suspicious">
+              <div class="metric-header">
+                <span class="metric-label">Suspicious Links</span>
+                <div class="metric-icon-wrap">
+                  <i data-lucide="alert-triangle"></i>
+                </div>
+              </div>
+              <div class="metric-value-wrap">
+                <span class="metric-value" id="statSuspiciousScans">0</span>
+                <span class="metric-badge" id="statSuspiciousPct">0%</span>
+              </div>
+            </div>
+
+            <div class="metric-card phishing">
+              <div class="metric-header">
+                <span class="metric-label">Phishing Threats Flagged</span>
+                <div class="metric-icon-wrap">
+                  <i data-lucide="shield-x"></i>
+                </div>
+              </div>
+              <div class="metric-value-wrap">
+                <span class="metric-value" id="statPhishingScans">0</span>
+                <span class="metric-badge" id="statPhishingPct">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual Charts Grid -->
+          <div class="charts-grid">
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <div>
+                  <h3 class="chart-title">Recent Scan Activity & Risk Scores</h3>
+                  <p class="chart-subtitle">Chronological progression of risk scores over recent evaluations</p>
+                </div>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="activityChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <div>
+                  <h3 class="chart-title">Security Distribution</h3>
+                  <p class="chart-subtitle">Proportion of Safe, Suspicious, and Phishing verdicts</p>
+                </div>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="distributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity Table Preview -->
+          <div class="table-card-container">
+            <div class="chart-card-header" style="padding: 1.25rem 1.5rem 0.5rem;">
+              <div>
+                <h3 class="chart-title">Recent Security Scans</h3>
+                <p class="chart-subtitle">Latest evaluated web destinations (including preloaded demo samples)</p>
+              </div>
+              <a href="#history" class="btn-secondary" data-page-target="history" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+                <span>View Full Archive</span>
+                <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>URL Destination</th>
+                  <th>Verdict</th>
+                  <th>Risk Score</th>
+                  <th>Evaluated</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentScansTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+        <!-- ====================================================
+             VIEW 2: URL SCANNER (CORE FEATURE)
+             ==================================================== -->
+        <section id="page-scanner" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">URL Threat Scanner</h2>
+              <p class="page-subtitle">Inspect suspicious links against 14 explainable heuristic security checks. No external requests are dispatched to target URLs.</p>
+            </div>
+          </div>
+
+          <!-- Scanner Input Card -->
+          <div class="scanner-container-card">
+            <div class="scanner-input-group">
+              <i data-lucide="globe" class="input-protocol-icon"></i>
+              <input 
+                type="text" 
+                id="urlInput" 
+                class="scanner-input-field" 
+                placeholder="Enter or paste destination URL (e.g. https://secure-login.paypal.verify-account.xyz/login)" 
+                autocomplete="off" 
+                spellcheck="false"
+              >
+              <div class="input-actions-cluster">
+                <button type="button" class="btn-input-utility" id="pasteUrlBtn" title="Paste from clipboard">
+                  <i data-lucide="clipboard"></i>
+                  <span>Paste</span>
+                </button>
+                <button type="button" class="btn-input-utility" id="clearUrlBtn" title="Clear input field">
+                  <i data-lucide="x"></i>
+                  <span>Clear</span>
+                </button>
+                <button type="button" class="btn-primary-scan" id="scanBtn">
+                  <i data-lucide="shield-check"></i>
+                  <span>Scan URL</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Example Test URL Pills -->
+            <div class="example-urls-section">
+              <span class="example-label">Quick Test Scenarios:</span>
+              <button type="button" class="example-url-pill" data-example-url="https://chase.com/personal/banking">
+                <i data-lucide="check-circle" style="color: var(--color-safe);"></i>
+                <span>Legitimate Bank</span>
+              </button>
+              <button type="button" class="example-url-pill" data-example-url="https://secure-login.paypa1-security-verification.xyz/signin">
+                <i data-lucide="alert-octagon" style="color: var(--color-danger);"></i>
+                <span>Typosquatted Brand Spoof</span>
+              </button>
+              <button type="button" class="example-url-pill" data-example-url="http://192.168.1.105:8080/portal/update-credentials.php">
+                <i data-lucide="cpu" style="color: var(--color-danger);"></i>
+                <span>IP Host + Non-standard Port</span>
+              </button>
+              <button type="button" class="example-url-pill" data-example-url="https://bit.ly/3xY8a9Q">
+                <i data-lucide="link-2" style="color: var(--color-warn);"></i>
+                <span>Shortened Link</span>
+              </button>
+              <button type="button" class="example-url-pill" data-example-url="https://login.verification.bank-security.account-update.xyz/auth?user=john@victim.com">
+                <i data-lucide="shield-alert" style="color: var(--color-danger);"></i>
+                <span>Excessive Subdomains & Urgency</span>
+              </button>
+            </div>
+
+            <!-- Animated Radar Scanning Progress -->
+            <div id="scannerLoadingState" class="scanner-loading-state hidden">
+              <div class="loading-radar-ring"></div>
+              <div class="loading-step-text" id="scanProgressStepText">Initializing heuristic engine...</div>
+            </div>
+          </div>
+
+          <!-- Scan Detailed Result Panel -->
+          <div id="scanResultPanel" class="scan-result-panel hidden">
+            
+            <!-- Result Header with Gauge -->
+            <div class="result-header-row">
+              <div class="result-url-block">
+                <div class="result-target-label">Target Link Analyzed</div>
+                <div class="result-target-url" id="resultDisplayUrl">-</div>
+                <div class="result-meta-row">
+                  <span>Evaluated: <strong id="resultTimestamp">-</strong></span>
+                  <span>Engine: <strong>Local Heuristic v1.4</strong></span>
+                </div>
+              </div>
+
+              <!-- Animated Circular Gauge -->
+              <div class="gauge-cluster">
+                <div class="gauge-svg-wrapper">
+                  <svg class="gauge-svg" viewBox="0 0 120 120">
+                    <circle class="gauge-bg-circle" cx="60" cy="60" r="54"></circle>
+                    <circle class="gauge-progress-circle" id="gaugeProgressCircle" cx="60" cy="60" r="54"></circle>
+                  </svg>
+                  <div class="gauge-inner-content">
+                    <span class="gauge-score-number" id="gaugeScoreText">0</span>
+                    <span class="gauge-score-max">/ 100</span>
+                  </div>
+                </div>
+                <div class="gauge-verdict-summary">
+                  <span class="verdict-badge" id="gaugeVerdictBadge">CALCULATING</span>
+                  <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;" id="resultRiskLevelText">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Summary & Recommendation Card -->
+            <div class="result-summary-card">
+              <h4>Diagnostic Summary</h4>
+              <p id="resultSummaryText">-</p>
+              <div class="result-recommendation">
+                <i data-lucide="compass"></i>
+                <span id="resultRecommendationText">-</span>
+              </div>
+            </div>
+
+            <!-- External Threat Intelligence (Backend Proxy Integration) -->
+            <div id="resultThreatIntelBlock" class="threat-intel-result-card hidden">
+              <div class="threat-intel-header">
+                <i data-lucide="shield-check"></i>
+                <span class="threat-intel-title">External Reputation Intelligence</span>
+                <span class="badge-tag-demo" id="threatIntelBadge">Backend Proxy</span>
+              </div>
+              <div id="resultThreatIntelBody" class="threat-intel-body"></div>
+            </div>
+
+            <!-- Identified Patterns Tags -->
+            <div class="patterns-section">
+              <div class="section-mini-heading">
+                <i data-lucide="tag"></i>
+                <span>Identified Heuristic Threat Signals</span>
+              </div>
+              <div class="pattern-chips-wrapper" id="resultPatternChips">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Explainable Checks Breakdown -->
+            <div class="checks-section">
+              <div class="section-mini-heading">
+                <i data-lucide="check-square"></i>
+                <span>Detailed Security Checks & Point Weighting</span>
+              </div>
+              <div class="checks-grid-list" id="resultChecksList">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="result-actions-footer">
+              <div class="footer-notice">
+                <i data-lucide="info" style="width: 14px; height: 14px;"></i>
+                <span>Heuristic scores are probabilistic risk indicators, not definitive proof.</span>
+              </div>
+              <div class="action-buttons-group">
+                <button type="button" class="btn-secondary" id="copyReportBtn">
+                  <i data-lucide="copy"></i>
+                  <span>Copy Report</span>
+                </button>
+                <button type="button" class="btn-secondary" id="exportJsonBtn">
+                  <i data-lucide="file-json"></i>
+                  <span>Export JSON</span>
+                </button>
+                <button type="button" class="btn-primary-scan" id="scanAnotherBtn" style="padding: 0.65rem 1.25rem;">
+                  <i data-lucide="plus-circle"></i>
+                  <span>Scan Another</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================
+             VIEW 3: SCAN HISTORY & ARCHIVE
+             ==================================================== -->
+        <section id="page-history" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">Scan History & Threat Archive</h2>
+              <p class="page-subtitle">Search, filter, inspect, and export previous scan diagnostics saved in local browser storage.</p>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="btn-secondary" id="exportCsvBtn">
+                <i data-lucide="download"></i>
+                <span>Export as CSV</span>
+              </button>
+              <button type="button" class="btn-danger" id="clearHistoryBtn" style="margin-left: 0.5rem;">
+                <i data-lucide="trash-2"></i>
+                <span>Clear All</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="history-controls-bar">
+            <div class="filter-group-left">
+              <div class="search-input-box">
+                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                <input type="text" id="historySearchInput" placeholder="Filter by URL or keyword...">
+              </div>
+
+              <select class="select-filter" id="historyVerdictFilter" aria-label="Filter by verdict">
+                <option value="all">All Verdicts</option>
+                <option value="safe">Safe Only</option>
+                <option value="suspicious">Suspicious Only</option>
+                <option value="phishing">Phishing Only</option>
+              </select>
+
+              <select class="select-filter" id="historySortSelect" aria-label="Sort records">
+                <option value="date-desc">Newest First</option>
+                <option value="date-asc">Oldest First</option>
+                <option value="score-desc">Risk: High to Low</option>
+                <option value="score-asc">Risk: Low to High</option>
+              </select>
+            </div>
+
+            <div class="counter-pill" id="historyTotalCount">0 records</div>
+          </div>
+
+          <!-- History Table -->
+          <div class="table-card-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>URL Destination</th>
+                  <th>Verdict</th>
+                  <th>Risk Score</th>
+                  <th>Evaluation Timestamp</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="storage-notice-card" style="margin-top: 1.5rem; padding: 1rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.75rem;">
+            <i data-lucide="hard-drive" style="color: var(--accent-cyan); width: 20px; height: 20px; flex-shrink: 0;"></i>
+            <span><strong>Privacy Notice:</strong> History records are stored exclusively in your browser's client-side <code>localStorage</code>. No URLs are logged to external servers or cloud databases. Clearing browser data will remove these records.</span>
+          </div>
+        </section>
+
+        <!-- ====================================================
+             VIEW 4: THREAT EDUCATION KNOWLEDGE BASE
+             ==================================================== -->
+        <section id="page-education" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">Threat Education Knowledge Base</h2>
+              <p class="page-subtitle">Learn how threat actors engineer fraudulent URLs, disguise malicious domains, and deceive human perception.</p>
+            </div>
+          </div>
+
+          <!-- Anatomy of a Malicious URL Diagram -->
+          <div class="anatomy-card">
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Anatomy of a Deceptive URL</h3>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">Phishers exploit visual trust by arranging domains and subdomains to deceive fast-reading victims:</p>
+
+            <div class="anatomy-diagram-wrapper">
+              <div class="anatomy-token token-protocol">
+                <span class="token-str">https://</span>
+                <span class="token-lbl">Protocol</span>
+              </div>
+              <div class="anatomy-token token-subdomain">
+                <span class="token-str">secure-login.paypal.com</span>
+                <span class="token-lbl">Deceptive Subdomain</span>
+              </div>
+              <span style="color: var(--text-muted); font-size: 1.2rem;">.</span>
+              <div class="anatomy-token token-target-spoof">
+                <span class="token-str">attacker-domain</span>
+                <span class="token-lbl">True Registered Host</span>
+              </div>
+              <div class="anatomy-token token-tld">
+                <span class="token-str">.xyz</span>
+                <span class="token-lbl">High-Abuse TLD</span>
+              </div>
+              <div class="anatomy-token token-path">
+                <span class="token-str">/auth/verify-account</span>
+                <span class="token-lbl">Urgent Path</span>
+              </div>
+              <div class="anatomy-token token-query">
+                <span class="token-str">?ref=victim@email.com</span>
+                <span class="token-lbl">Tracking Query</span>
+              </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Notice how the brand name <code>paypal.com</code> is placed inside the <em>subdomain</em> portion. The browser actually connects to <code>attacker-domain.xyz</code>.
+            </p>
+          </div>
+
+          <!-- Threat Topics Grid -->
+          <div class="education-cards-grid">
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="copy"></i></div>
+              <h4 class="edu-title">Typosquatting & Lookalike Domains</h4>
+              <p class="edu-desc">Typosquatting targets typing mistakes and optical resemblances, substituting letters with numbers or lookalike symbols (e.g., <code>paypa1.com</code> or <code>micros0ft.com</code>).</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> Always read the domain name from right to left before the first single slash.</li>
+                <li><i data-lucide="check"></i> Bookmark critical banking and enterprise portals rather than clicking links.</li>
+              </ul>
+            </div>
+
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="globe-2"></i></div>
+              <h4 class="edu-title">Homograph & IDN Attacks (Punycode)</h4>
+              <p class="edu-desc">Attackers register domain names using international alphabets (such as Cyrillic or Greek) where characters look identical to Latin letters (e.g. Cyrillic "а" U+0430 vs Latin "a").</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> Browsers represent these as Punycode starting with <code>xn--</code>.</li>
+                <li><i data-lucide="check"></i> Any unexpected <code>xn--</code> prefix on a major brand domain is an immediate red flag.</li>
+              </ul>
+            </div>
+
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="link"></i></div>
+              <h4 class="edu-title">The Hidden Risk of URL Shorteners</h4>
+              <p class="edu-desc">Shortening services (e.g. <code>bit.ly</code>, <code>tinyurl.com</code>) conceal destination endpoints, allowing attackers to bypass gateway email reputation filters.</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> Use URL expanders to preview the final destination before clicking.</li>
+                <li><i data-lucide="check"></i> Treat shortened links received via SMS (smishing) with extreme skepticism.</li>
+              </ul>
+            </div>
+
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="lock"></i></div>
+              <h4 class="edu-title">The "HTTPS Safe" Myth</h4>
+              <p class="edu-desc">A padlock icon in the browser only guarantees that traffic is encrypted between you and the server. It does NOT mean the website is legitimate. Today, over 80% of phishing kits obtain free SSL certificates.</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> HTTPS guarantees encryption, not authenticity or trustworthiness.</li>
+                <li><i data-lucide="check"></i> Never assume a site is safe simply because it displays a green lock icon.</li>
+              </ul>
+            </div>
+
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="server"></i></div>
+              <h4 class="edu-title">Raw IP Address Destinations</h4>
+              <p class="edu-desc">Legitimate public web services virtually always use Fully Qualified Domain Names (FQDNs). URLs directing straight to an IP address (e.g. <code>http://192.168.1.5:8080</code>) bypass domain registration oversight.</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> Consumer websites never require logins through raw IP addresses.</li>
+                <li><i data-lucide="check"></i> Phishing kits frequently host temporary credentials-stealers on bare IPs.</li>
+              </ul>
+            </div>
+
+            <div class="edu-card">
+              <div class="edu-icon"><i data-lucide="shield-check"></i></div>
+              <h4 class="edu-title">Golden Rules for Safe Browsing</h4>
+              <p class="edu-desc">Defensive habits that prevent credential compromise across all communication channels:</p>
+              <ul class="edu-tips-list">
+                <li><i data-lucide="check"></i> Enable Multi-Factor Authentication (MFA/FIDO2 hardware keys).</li>
+                <li><i data-lucide="check"></i> Never authenticate after clicking a link in an urgent email or text message.</li>
+                <li><i data-lucide="check"></i> Verify the sender's actual address, not just their display name.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================
+             VIEW 5: ABOUT PROJECT & THREAT INTEL ARCHITECTURE
+             ==================================================== -->
+        <section id="page-about" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">About PhishGuard</h2>
+              <p class="page-subtitle">Architecture overview, transparent heuristic methodology, responsible cybersecurity disclosures, and threat intel integration design.</p>
+            </div>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-card">
+              <h3>Mission & Architectural Design</h3>
+              <p>
+                <strong>PhishGuard</strong> is an educational and analytical cybersecurity web application designed to demonstrate transparent, explainable heuristic detection of malicious URLs.
+              </p>
+              <p>
+                Unlike opaque machine-learning models where predictions are black boxes, PhishGuard exposes the exact structural signals that contributed to the assessment: protocol safety, IP-in-hostname, typosquatting distance, character entropy, deep subdomain nesting, and credential keywords.
+              </p>
+
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">Modular Threat Intelligence Integration Design</h4>
+              <p>
+                In a production enterprise architecture, heuristic analysis operates as <em>Tier 1 (Instant Local Filter)</em>. To integrate with commercial feeds (such as Google Safe Browsing API v4 or VirusTotal v3), PhishGuard is structured for seamless backend proxy integration:
+              </p>
+              <ul style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">
+                <li><strong>Backend Proxy:</strong> API credentials are kept securely on the server; never exposed to browser client JavaScript.</li>
+                <li><strong>Explicit Disclosure:</strong> The user is always notified before any URL is transmitted to external providers.</li>
+                <li><strong>Safe Handling:</strong> Submitted URLs are never rendered as raw HTML or navigated to by the scanner.</li>
+              </ul>
+
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">Responsible Use & Limitations Disclaimer</h4>
+              <div style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid var(--color-danger); padding: 1rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                <strong>Notice:</strong> PhishGuard produces probabilistic heuristic risk indicators for cybersecurity awareness and research. No automated tool can guarantee that an evaluated URL is 100% safe. Always practice defense-in-depth and adhere to your organization's security policies.
+              </div>
+            </div>
+
+            <div class="about-card">
+              <h3>Technical Stack</h3>
+              <p>Built with modern standards for zero-dependency local execution:</p>
+              
+              <div class="tech-stack-tags">
+                <span class="tech-tag">HTML5 Semantic</span>
+                <span class="tech-tag">CSS3 Variables</span>
+                <span class="tech-tag">JavaScript (ES6+)</span>
+                <span class="tech-tag">Chart.js (Doughnut & Area)</span>
+                <span class="tech-tag">Lucide Icons</span>
+                <span class="tech-tag">localStorage Persistence</span>
+                <span class="tech-tag">SVG Circular Gauge</span>
+                <span class="tech-tag">Levenshtein Distance</span>
+                <span class="tech-tag">Shannon Entropy</span>
+              </div>
+
+              <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-top: 1.75rem; margin-bottom: 0.5rem;">Risk Calibration</h4>
+              <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                <div><strong style="color: var(--color-safe);">0 – 29: Low Risk (Safe)</strong> — Standard FQDN, encrypted HTTPS, normal lexical properties.</div>
+                <div><strong style="color: var(--color-warn);">30 – 59: Medium Risk (Suspicious)</strong> — Obfuscated parameters, shortener, or non-standard structure.</div>
+                <div><strong style="color: var(--color-danger);">60 – 100: High Risk (Phishing)</strong> — Brand spoofing, IP host, Punycode disguise, or credential traps.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================
+             VIEW 6: SETTINGS & LOCAL STORAGE MANAGEMENT
+             ==================================================== -->
+        <section id="page-settings" class="page-view">
+          <div class="page-header">
+            <div>
+              <h2 class="page-title">Settings & Configuration</h2>
+              <p class="page-subtitle">Customize application preferences, manage local history data, and inspect storage footprint.</p>
+            </div>
+          </div>
+
+          <div class="settings-section-card">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">Interface Preferences</h3>
+            
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4>Color Theme</h4>
+                <p>Toggle between Dark Cyber Mode and Clean Light Mode.</p>
+              </div>
+              <button class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle theme">
+                <i data-lucide="sun" class="theme-toggle-icon"></i>
+              </button>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4>Engine Mode</h4>
+                <p>Local client-side heuristics (zero latency, zero telemetry).</p>
+              </div>
+              <span class="verdict-badge badge-safe">Autonomous Local</span>
+            </div>
+          </div>
+
+          <div class="settings-section-card">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">Data Management</h3>
+
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4>Restore Demo Scans</h4>
+                <p>Repopulate the dashboard with representative demonstration records (Safe, Suspicious, Phishing).</p>
+              </div>
+              <button class="btn-secondary" id="btnResetDemoData">
+                <i data-lucide="refresh-cw"></i>
+                <span>Restore Sample Data</span>
+              </button>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4>Wipe All Stored Data</h4>
+                <p>Permanently remove all scan records from this browser's localStorage.</p>
+              </div>
+              <button class="btn-danger" id="btnWipeAllData">
+                <i data-lucide="trash-2"></i>
+                <span>Wipe All Records</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- App Footer -->
+      <footer class="app-footer">
+        <div class="footer-notice">
+          <i data-lucide="shield-alert" style="width: 16px; height: 16px; color: var(--accent-cyan);"></i>
+          <span>PhishGuard &bull; Built for cybersecurity awareness and education.</span>
+        </div>
+        <div class="footer-links">
+          <a href="#overview" data-page-target="overview">Dashboard</a>
+          <a href="#scanner" data-page-target="scanner">Scanner</a>
+          <a href="#education" data-page-target="education">Threat Education</a>
+          <a href="#about" data-page-target="about">Disclaimer</a>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 1: SCAN DETAIL INSPECTOR
+       ==================================================== -->
+  <div class="modal-backdrop" id="modalScanDetail" role="dialog" aria-modal="true">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Security Diagnostic Report</h3>
+        <button class="modal-close" data-modal-dismiss aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Evaluated Link</div>
+          <div id="modalDetailUrl" style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: var(--text-primary); word-break: break-all; margin-top: 0.25rem;">-</div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Verdict</div>
+            <div style="margin-top: 0.25rem;"><span class="verdict-badge" id="modalDetailVerdictBadge">-</span></div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Score & Level</div>
+            <div id="modalDetailScore" style="font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">-</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Evaluated Date</div>
+            <div id="modalDetailTimestamp" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.25rem;">-</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Summary</div>
+          <p id="modalDetailSummary" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem; line-height: 1.5;">-</p>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Recommended Action</div>
+          <p id="modalDetailRecommendation" style="font-size: 0.9rem; color: var(--accent-cyan); font-weight: 500; margin-top: 0.25rem;">-</p>
+        </div>
+
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem;">Identified Signals</div>
+          <div id="modalDetailPatterns" class="pattern-chips-wrapper"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="modalCopyReportBtn">
+          <i data-lucide="copy"></i>
+          <span>Copy Report</span>
+        </button>
+        <button type="button" class="btn-secondary" data-modal-dismiss>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 2: CONFIRM CLEAR ALL HISTORY
+       ==================================================== -->
+  <div class="modal-backdrop" id="modalConfirmClear" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Clear All History?</h3>
+        <button class="modal-close" data-modal-dismiss aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 0.75rem;">Are you sure you want to permanently delete all scan records from your local storage?</p>
+        <p style="font-size: 0.82rem; color: var(--text-muted);">You can restore the sample demonstration data at any time from the Settings page.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" data-modal-dismiss>Cancel</button>
+        <button type="button" class="btn-danger" id="btnConfirmClearAll">Yes, Clear Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/analyzer.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
+
